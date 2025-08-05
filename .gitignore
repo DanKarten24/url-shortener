@@ -1,0 +1,10 @@
+.env
+
+src/runtime/
+src/web/assets/
+src/vendor/
+
+.vscode/
+.idea/
+*.swp
+*.swo
