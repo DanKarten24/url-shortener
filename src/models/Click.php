@@ -80,7 +80,7 @@ class Click extends ActiveRecord
     public static function checkIfBot($userAgent, $shortCode = null)
     {
         if (empty($userAgent)) {
-            return false;
+            return true;
         }
 
         try {
@@ -90,14 +90,11 @@ class Click extends ActiveRecord
                 $data = json_decode($response, true);
                 if (isset($data['isBot'])) {
                     $isBot = (bool)$data['isBot'];
-                    \Yii::info('[' . ($shortCode ?: '-') . '] [' . $userAgent . '] [' . $response . ']', 'api.bot');
                     return $isBot;
                 }
             }
         } catch (\Exception $e) {
-            // Не логируем ошибку в api-bot.log
         }
-        \Yii::info('[' . ($shortCode ?: '-') . '] [' . $userAgent . '] [' . ($response !== false ? $response : '{}') . ']', 'api.bot');
-        return false;
+       return false;
     }
 } 
