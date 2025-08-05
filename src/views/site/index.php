@@ -6,6 +6,10 @@ $this->title = 'Qnits URL Shortener';
 
 <h1>Qnits URL Shortener</h1>
 
+<div class="stats-link">
+    <a href="/site/top">Статистика</a>
+</div>
+
 <form id="urlForm">
     <div class="form-group">
         <label for="originalUrl">Введите ссылку:</label>
@@ -72,10 +76,43 @@ $this->title = 'Qnits URL Shortener';
     });
     
     function copyToClipboard(text) {
-        navigator.clipboard.writeText(text).then(function() {
-            alert('Ссылка скопирована в буфер обмена!');
-        }, function(err) {
-            console.error('Ошибка копирования: ', err);
-        });
+        // Пробуем современный Clipboard API
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(function() {
+                alert('Ссылка скопирована в буфер обмена!');
+            }).catch(function(err) {
+                console.error('Ошибка Clipboard API: ', err);
+                // Fallback на старый метод
+                fallbackCopyTextToClipboard(text);
+            });
+        } else {
+            // Fallback для старых браузеров
+            fallbackCopyTextToClipboard(text);
+        }
+    }
+    
+    function fallbackCopyTextToClipboard(text) {
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        
+        try {
+            const successful = document.execCommand('copy');
+            if (successful) {
+                alert('Ссылка скопирована в буфер обмена!');
+            } else {
+                alert('Не удалось скопировать ссылку. Скопируйте вручную: ' + text);
+            }
+        } catch (err) {
+            console.error('Ошибка fallback копирования: ', err);
+            alert('Не удалось скопировать ссылку. Скопируйте вручную: ' + text);
+        }
+        
+        document.body.removeChild(textArea);
     }
 </script> 

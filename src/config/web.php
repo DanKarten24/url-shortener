@@ -46,17 +46,12 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'top' => 'site/top',
                 'api/url/create' => 'url/create',
                 '<shortCode:[a-zA-Z0-9]{5}>' => 'url/redirect',
             ],
         ],
-        'db' => [
-            'class' => 'yii\db\Connection',
-            'dsn' => 'mysql:host=' . (getenv('DB_HOST') ?: 'db') . ';dbname=' . (getenv('DB_DATABASE') ?: 'qnits'),
-            'username' => getenv('DB_USER') ?: 'qnits',
-            'password' => getenv('DB_PASSWORD') ?: 'password',
-            'charset' => 'utf8mb4',
-        ],
+        'db' => require __DIR__ . '/db.php',
     ],
     'params' => $params,
 ]; 

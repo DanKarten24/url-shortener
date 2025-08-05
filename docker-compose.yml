@@ -5,9 +5,14 @@ services:
       dockerfile: Dockerfile
     container_name: url-shortener-app
     restart: unless-stopped
+    environment:
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
     working_dir: /var/www/html
     volumes:
       - ./src:/var/www/html
+      - vendor:/var/www/html/vendor
     networks:
       - app-network
     depends_on:
@@ -49,3 +54,4 @@ networks:
 
 volumes:
   dbdata:
+  vendor:
